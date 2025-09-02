@@ -1246,7 +1246,7 @@
 
             if (audioText) {
                 const audio = document.getElementById('audioPlayer');
-                audio.src = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=hi&client=tw-ob&q=' + encodeURIComponent(audioText);
+                audio.src = 'https://api.hindi-help.apps.atom-ops.ca/tts?text=' + encodeURIComponent(audioText);
                 audio.play().catch(e => console.error("Audio play failed:", e));
 
                 if (!appState.audioPlayCounts[audioText]) {
