@@ -32,6 +32,7 @@ jobs:
       - name: Deploy to S3 with optimized settings
         run: |
           aws s3 cp index.html s3://${{ env.S3_BUCKET }}/index.html
+          aws s3 cp sw.js s3://${{ env.S3_BUCKET }}/sw.js
 
       - name: Invalidate CloudFront cache
         run: |
