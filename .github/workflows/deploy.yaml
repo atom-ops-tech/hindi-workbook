@@ -1,0 +1,40 @@
+name: Deploy Hindi Learning App
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write  # Required for OIDC authentication
+  contents: read   # Required to checkout repository
+
+jobs:
+  build-and-deploy:
+    name: Copy and deploy
+    runs-on: ubuntu-latest
+    
+    env:
+      AWS_REGION: us-west-2
+      S3_BUCKET: hindi-learning-atom-ops-homepage-011015904112
+      CLOUDFRONT_DISTRIBUTION_ID: EL12XV3NK128Z
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::011015904112:role/gha-hindi-learning-website-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to S3 with optimized settings
+        run: |
+          aws s3 cp index.html s3://${{ env.S3_BUCKET }}/index.html
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"

@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>Family Hindi Learning - 90 Day Digital Workbook</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #FF6B35;
+            --secondary: #F7931E;
+            --accent: #4ECDC4;
+            --dark: #2C3E50;
+            --light: #F5F7FA;
+            --success: #27AE60;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+            --gradient: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --bottom-nav-height: 65px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #FFFFFF;
+            min-height: 100vh;
+            color: var(--dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .app-container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--light);
+        }
+
+        .header {
+            background: var(--gradient);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            font-size: 13px;
+            opacity: 0.95;
+            margin-top: 2px;
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: calc(var(--bottom-nav-height) + 10px);
+            background: var(--light);
+        }
+
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+            padding: 15px;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--bottom-nav-height);
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #999;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item .icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+
+        .nav-item .label {
+            font-size: 10px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .word-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 15px;
+        }
+
+        .hindi-word {
+            font-size: 42px;
+            text-align: center;
+            color: var(--primary);
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .transliteration {
+            font-size: 22px;
+            text-align: center;
+            color: var(--secondary);
+            margin: 10px 0;
+        }
+
+        .phonetic {
+            font-size: 16px;
+            text-align: center;
+            color: #666;
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        .emoji-display {
+            font-size: 56px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .meaning {
+            font-size: 18px;
+            text-align: center;
+            color: var(--dark);
+            margin: 15px 0;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .audio-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 15px auto;
+            display: block;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(78, 205, 196, 0.3);
+        }
+
+        .audio-btn:active {
+            transform: scale(0.95);
+        }
+
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .letter-box {
+            aspect-ratio: 1;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .letter-box.completed {
+            background: var(--success);
+            color: white;
+        }
+
+        .letter-box.current {
+            background: var(--warning);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .letter-box.next {
+            border: 2px solid var(--primary);
+            animation: shimmerBorder 3s infinite;
+        }
+
+        @keyframes shimmerBorder {
+
+            0%,
+            100% {
+                border-color: var(--primary);
+            }
+
+            50% {
+                border-color: var(--accent);
+            }
+        }
+
+        .letter-box.locked {
+            background: #e8e8e8;
+            color: #aaa;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .phrase-category {
+            margin-bottom: 25px;
+        }
+
+        .phrase-category h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .phrase-carousel {
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            display: flex;
+            gap: 12px;
+            padding: 5px 0 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .phrase-carousel::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .phrase-carousel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .phrase-carousel::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .phrase-card {
+            flex: 0 0 280px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            scroll-snap-align: start;
+            transition: transform 0.3s;
+        }
+
+        .phrase-card:active {
+            transform: scale(0.98);
+        }
+
+        .phrase-english {
+            font-size: 16px;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .phrase-hindi {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .phrase-transliteration {
+            font-size: 14px;
+            color: var(--secondary);
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .phrase-context {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .category-card:active {
+            transform: scale(0.95);
+        }
+
+        .category-card .emoji {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .category-card .name {
+            font-size: 14px;
+            color: var(--dark);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .category-card .count {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .category-card.completed {
+            background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+            color: white;
+        }
+
+        .category-card.completed .count {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .quiz-container {
+            padding: 15px;
+        }
+
+        .quiz-question {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--dark);
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            line-height: 1.5;
+        }
+
+        .quiz-type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 18px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            box-shadow: var(--card-shadow);
+            line-height: 1.4;
+        }
+
+        .quiz-option:active {
+            transform: scale(0.98);
+        }
+
+        .quiz-option .translit {
+            font-size: 13px;
+            color: var(--secondary);
+            display: block;
+        }
+
+        .quiz-option.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .quiz-option.correct .translit {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+
+        .quiz-option.incorrect {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        .quiz-option.incorrect .translit {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+
+        .stats-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stats-card h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            background: #e8e8e8;
+            border-radius: 8px;
+            height: 18px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            background: var(--gradient);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .achievement {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 16px;
+            margin: 4px;
+            font-size: 12px;
+        }
+
+        .history-item {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-date {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .history-word {
+            font-size: 16px;
+            color: var(--dark);
+            line-height: 1.4;
+        }
+
+        .history-word .hindi-script {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .mini-audio-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: calc(var(--bottom-nav-height) + 20px);
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 280px;
+            text-align: center;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: rgba(39, 174, 96, 0.95);
+        }
+
+        .toast.warning {
+            background: rgba(243, 156, 18, 0.95);
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            padding: 20px;
+            overflow-y: auto;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-overlay.show {
+            display: block;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 50px auto;
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            margin-top: 15px;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .word-list-item {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .word-list-item .hindi {
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .word-list-item .english {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .fun-fact {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            margin: 8px 0;
+            font-size: 13px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-metric {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stat-metric:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="header">
+            <button class="language-toggle" onclick="toggleLanguage()">EN/HI</button>
+            <h1 data-translate="app-title">Family Hindi Learning</h1>
+            <div class="subtitle" data-translate="app-subtitle">90-Day Digital Workbook</div>
+        </div>
+
+        <div class="tab-content">
+            <div id="todayTab" class="tab-panel active">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <h2 style="color: var(--primary); font-size: 20px;">✨ Word of the Day ✨</h2>
+                </div>
+                <div class="word-card">
+                    <div class="emoji-display" id="todayEmoji"></div>
+                    <div class="hindi-word" id="todayHindi"></div>
+                    <div class="transliteration" id="todayTranslit"></div>
+                    <div class="phonetic" id="todayPhonetic"></div>
+                    <button class="audio-btn" onclick="playAudio('today')">🔊</button>
+                    <div class="meaning" id="todayMeaning"></div>
+                    <div id="todayGender" style="text-align: center; color: #666; margin: 10px 0;"></div>
+                    <div id="todayExample"
+                        style="margin-top: 15px; padding: 12px; background: #f8f9fa; border-radius: 10px; line-height: 1.5;">
+                    </div>
+                    <div id="todayTrick"
+                        style="margin-top: 12px; padding: 12px; background: #fff3cd; border-radius: 10px; font-style: italic;">
+                    </div>
+                </div>
+            </div>
+
+            <div id="alphabetTab" class="tab-panel">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <h2 style="color: var(--primary); font-size: 20px;" data-translate="alphabet-title">Your Alphabet
+                        Journey</h2>
+                    <p id="alphabetProgress" style="color: #666; margin-top: 8px; font-size: 14px;"></p>
+                </div>
+                <div class="alphabet-grid" id="alphabetGrid"></div>
+            </div>
+
+            <div id="wordsTab" class="tab-panel">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <h2 style="color: var(--primary); font-size: 20px;" data-translate="words-title">Learn Words by
+                        Category</h2>
+                </div>
+                <div class="category-grid" id="categoryGrid"></div>
+            </div>
+
+            <div id="phrasesTab" class="tab-panel">
+                <div style="margin-bottom: 15px;">
+                    <h2 style="color: var(--primary); font-size: 20px; text-align: center;"
+                        data-translate="phrases-title">Essential Phrases</h2>
+                    <p style="text-align: center; color: #666; font-size: 13px; margin-top: 5px;"
+                        data-translate="swipe-hint">← Swipe cards to explore →</p>
+                </div>
+                <div id="phrasesContainer"></div>
+            </div>
+
+            <div id="historyTab" class="tab-panel">
+                <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 20px;" data-translate="history-title">
+                    Your Learning History</h2>
+                <div id="historyContainer"></div>
+            </div>
+
+            <div id="quizTab" class="tab-panel">
+                <div class="quiz-container">
+                    <h2 style="color: var(--primary); text-align: center; margin-bottom: 15px; font-size: 20px;"
+                        data-translate="quiz-title">Practice Quiz</h2>
+                    <div id="quizContent"></div>
+                </div>
+            </div>
+
+            <div id="statsTab" class="tab-panel">
+                <div id="statsContainer"></div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('todayTab', this)">
+                <div class="icon">📅</div>
+                <span class="label" data-translate="tab-today">Today</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('alphabetTab', this)">
+                <div class="icon">🔤</div>
+                <span class="label" data-translate="tab-alphabet">A-Z</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('wordsTab', this)">
+                <div class="icon">📖</div>
+                <span class="label" data-translate="tab-words">Words</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('phrasesTab', this)">
+                <div class="icon">💬</div>
+                <span class="label" data-translate="tab-phrases">Phrases</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('historyTab', this)">
+                <div class="icon">📚</div>
+                <span class="label" data-translate="tab-history">History</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('quizTab', this)">
+                <div class="icon">🎯</div>
+                <span class="label" data-translate="tab-quiz">Quiz</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('statsTab', this)">
+                <div class="icon">📊</div>
+                <span class="label" data-translate="tab-stats">Stats</span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer" style="display: none;"></audio>
+    <div id="toast" class="toast"></div>
+    <div id="modal" class="modal-overlay"></div>
+
+    <script>
+        // Database
+        const alphabetWords = {
+            'A': [
+                { hindi: 'सेब', transliteration: 'seb', phonetic: 'seb', english: 'Apple', emoji: '🍎', gender: 'm', example_hi: 'यह सेब लाल है।', example_translit: '(yah seb laal hai)', example_en: 'This apple is red.', trick: 'SEb = Save the apple!' },
+                { hindi: 'आम', transliteration: 'aam', phonetic: 'aam', english: 'Mango', emoji: '🥭', gender: 'm', example_hi: 'आम मीठा है।', example_translit: '(aam meetha hai)', example_en: 'Mango is sweet.', trick: 'AAM = Amazing Mango' },
+                { hindi: 'पता', transliteration: 'pata', phonetic: 'pa-TAA', english: 'Address', emoji: '📍', gender: 'm', example_hi: 'मेरा पता यह है।', example_translit: '(mera pata yah hai)', example_en: 'This is my address.', trick: 'PAT-A letter' },
+                { hindi: 'हवाई जहाज़', transliteration: 'hawaai jahaaz', phonetic: 'ha-VAA-ee ja-HAAZ', english: 'Airplane', emoji: '✈️', gender: 'm', example_hi: 'हवाई जहाज़ उड़ रहा है।', example_translit: '(hawaai jahaaz ud raha hai)', example_en: 'The airplane is flying.', trick: 'HAWAII by plane' }
+            ],
+            'B': [
+                { hindi: 'गेंद', transliteration: 'gend', phonetic: 'gend', english: 'Ball', emoji: '⚽', gender: 'f', example_hi: 'गेंद गोल है।', example_translit: '(gend gol hai)', example_en: 'The ball is round.', trick: 'GAINED a ball' },
+                { hindi: 'किताब', transliteration: 'kitaab', phonetic: 'ki-TAAB', english: 'Book', emoji: '📚', gender: 'f', example_hi: 'किताब मोटी है।', example_translit: '(kitaab moti hai)', example_en: 'The book is thick.', trick: 'KEY-TAB book' },
+                { hindi: 'रोटी', transliteration: 'roti', phonetic: 'RO-tee', english: 'Bread', emoji: '🍞', gender: 'f', example_hi: 'रोटी गरम है।', example_translit: '(roti garam hai)', example_en: 'The bread is hot.', trick: 'ROTI rotates' },
+                { hindi: 'भालू', transliteration: 'bhaalu', phonetic: 'BHAA-loo', english: 'Bear', emoji: '🐻', gender: 'm', example_hi: 'भालू बड़ा है।', example_translit: '(bhaalu bada hai)', example_en: 'The bear is big.', trick: 'BLUE bear' }
+            ],
+            'C': [
+                { hindi: 'बिल्ली', transliteration: 'billi', phonetic: 'BILL-ee', english: 'Cat', emoji: '🐱', gender: 'f', example_hi: 'बिल्ली सो रही है।', example_translit: '(billi so rahi hai)', example_en: 'The cat is sleeping.', trick: 'BILLY the cat' },
+                { hindi: 'गाड़ी', transliteration: 'gaadi', phonetic: 'GAA-dee', english: 'Car', emoji: '🚗', gender: 'f', example_hi: 'गाड़ी तेज़ है।', example_translit: '(gaadi tez hai)', example_en: 'The car is fast.', trick: 'GUARD the car' },
+                { hindi: 'गाय', transliteration: 'gaay', phonetic: 'gaay', english: 'Cow', emoji: '🐄', gender: 'f', example_hi: 'गाय दूध देती है।', example_translit: '(gaay doodh deti hai)', example_en: 'The cow gives milk.', trick: 'GUY watches cow' },
+                { hindi: 'कुर्सी', transliteration: 'kursi', phonetic: 'KUR-see', english: 'Chair', emoji: '🪑', gender: 'f', example_hi: 'कुर्सी आरामदायक है।', example_translit: '(kursi aaraamadaayak hai)', example_en: 'The chair is comfortable.', trick: 'KURSI to sit' }
+            ],
+            'D': [
+                { hindi: 'कुत्ता', transliteration: 'kutta', phonetic: 'KUT-ta', english: 'Dog', emoji: '🐕', gender: 'm', example_hi: 'कुत्ता भौंक रहा है।', example_translit: '(kutta bhaunk raha hai)', example_en: 'The dog is barking.', trick: 'CUT-ta the dog' },
+                { hindi: 'दरवाज़ा', transliteration: 'darwaaza', phonetic: 'dur-WAA-za', english: 'Door', emoji: '🚪', gender: 'm', example_hi: 'दरवाज़ा खुला है।', example_translit: '(darwaaza khula hai)', example_en: 'The door is open.', trick: 'DOOR-ways' },
+                { hindi: 'गुड़िया', transliteration: 'gudiya', phonetic: 'gu-DEE-ya', english: 'Doll', emoji: '🪆', gender: 'f', example_hi: 'गुड़िया सुंदर है।', example_translit: '(gudiya sundar hai)', example_en: 'The doll is beautiful.', trick: 'GOOD-iya doll' },
+                { hindi: 'डॉक्टर', transliteration: 'doctor', phonetic: 'DOC-tor', english: 'Doctor', emoji: '👨‍⚕️', gender: 'm/f', example_hi: 'डॉक्टर आ गया।', example_translit: '(doctor aa gaya)', example_en: 'The doctor has arrived.', trick: 'DOCTOR same!' }
+            ],
+            'E': [
+                { hindi: 'हाथी', transliteration: 'haathi', phonetic: 'HAA-thee', english: 'Elephant', emoji: '🐘', gender: 'm', example_hi: 'हाथी बड़ा है।', example_translit: '(haathi bada hai)', example_en: 'The elephant is big.', trick: 'HEARTY elephant' },
+                { hindi: 'अंडा', transliteration: 'anda', phonetic: 'UN-da', english: 'Egg', emoji: '🥚', gender: 'm', example_hi: 'अंडा सफ़ेद है।', example_translit: '(anda safed hai)', example_en: 'The egg is white.', trick: 'UNDER the egg' },
+                { hindi: 'आँख', transliteration: 'aankh', phonetic: 'aankh', english: 'Eye', emoji: '👁️', gender: 'f', example_hi: 'आँख से देखो।', example_translit: '(aankh se dekho)', example_en: 'Look with your eyes.', trick: 'ANKLE to eye' },
+                { hindi: 'कान', transliteration: 'kaan', phonetic: 'kaan', english: 'Ear', emoji: '👂', gender: 'm', example_hi: 'कान से सुनो।', example_translit: '(kaan se suno)', example_en: 'Listen with your ears.', trick: 'CAN hear' }
+            ],
+            'F': [
+                { hindi: 'मछली', transliteration: 'machhli', phonetic: 'MUCH-lee', english: 'Fish', emoji: '🐟', gender: 'f', example_hi: 'मछली तैर रही है।', example_translit: '(machhli tair rahi hai)', example_en: 'The fish is swimming.', trick: 'MUCH-ly fish' },
+                { hindi: 'फूल', transliteration: 'phool', phonetic: 'phool', english: 'Flower', emoji: '🌸', gender: 'm', example_hi: 'फूल सुंदर है।', example_translit: '(phool sundar hai)', example_en: 'The flower is beautiful.', trick: 'POOL of flowers' },
+                { hindi: 'फल', transliteration: 'phal', phonetic: 'phal', english: 'Fruit', emoji: '🍓', gender: 'm', example_hi: 'फल मीठे हैं।', example_translit: '(phal meethe hain)', example_en: 'The fruits are sweet.', trick: 'FULL of fruits' },
+                { hindi: 'पिता', transliteration: 'pita', phonetic: 'pi-TAA', english: 'Father', emoji: '👨', gender: 'm', example_hi: 'पिता जी आए।', example_translit: '(pita ji aaye)', example_en: 'Father has come.', trick: 'PITA bread' }
+            ],
+            'G': [
+                { hindi: 'अंगूर', transliteration: 'angoor', phonetic: 'un-GOOR', english: 'Grapes', emoji: '🍇', gender: 'm', example_hi: 'अंगूर खट्टे हैं।', example_translit: '(angoor khatte hain)', example_en: 'Grapes are sour.', trick: 'Angry GURU' },
+                { hindi: 'बकरी', transliteration: 'bakri', phonetic: 'BUK-ree', english: 'Goat', emoji: '🐐', gender: 'f', example_hi: 'बकरी घास खाती है।', example_translit: '(bakri ghaas khaati hai)', example_en: 'The goat eats grass.', trick: 'BAKERY goat' },
+                { hindi: 'लड़की', transliteration: 'ladki', phonetic: 'LUD-kee', english: 'Girl', emoji: '👧', gender: 'f', example_hi: 'लड़की गा रही है।', example_translit: '(ladki ga rahi hai)', example_en: 'The girl is singing.', trick: 'LADY-ki girl' },
+                { hindi: 'चश्मा', transliteration: 'chashma', phonetic: 'CHUSH-ma', english: 'Glasses', emoji: '👓', gender: 'm', example_hi: 'चश्मा साफ़ है।', example_translit: '(chashma saaf hai)', example_en: 'The glasses are clean.', trick: 'CHUSH-ma see' }
+            ],
+            'H': [
+                { hindi: 'घर', transliteration: 'ghar', phonetic: 'ghar', english: 'House', emoji: '🏠', gender: 'm', example_hi: 'घर बड़ा है।', example_translit: '(ghar bada hai)', example_en: 'The house is big.', trick: 'GARAGE home' },
+                { hindi: 'हाथ', transliteration: 'haath', phonetic: 'haath', english: 'Hand', emoji: '✋', gender: 'm', example_hi: 'हाथ साफ है।', example_translit: '(haath saaf hai)', example_en: 'The hand is clean.', trick: 'HEART in hand' },
+                { hindi: 'टोपी', transliteration: 'topi', phonetic: 'TO-pee', english: 'Hat', emoji: '🎩', gender: 'f', example_hi: 'टोपी लाल है।', example_translit: '(topi laal hai)', example_en: 'The hat is red.', trick: 'TOP-ee on head' },
+                { hindi: 'घोड़ा', transliteration: 'ghoda', phonetic: 'GHO-da', english: 'Horse', emoji: '🐴', gender: 'm', example_hi: 'घोड़ा दौड़ रहा है।', example_translit: '(ghoda daud raha hai)', example_en: 'The horse is running.', trick: 'GO-da horse!' }
+            ],
+            'I': [
+                { hindi: 'बर्फ़', transliteration: 'barf', phonetic: 'burf', english: 'Ice', emoji: '🧊', gender: 'f', example_hi: 'बर्फ़ ठंडी है।', example_translit: '(barf thandi hai)', example_en: 'The ice is cold.', trick: 'BARF on ice' },
+                { hindi: 'स्याही', transliteration: 'syaahi', phonetic: 'SYAA-hee', english: 'Ink', emoji: '🖋️', gender: 'f', example_hi: 'स्याही काली है।', example_translit: '(syaahi kaali hai)', example_en: 'The ink is black.', trick: 'SEE-ah ink' },
+                { hindi: 'कीट', transliteration: 'keet', phonetic: 'keet', english: 'Insect', emoji: '🐛', gender: 'm', example_hi: 'कीट छोटा है।', example_translit: '(keet chhota hai)', example_en: 'The insect is small.', trick: 'KEET insect' },
+                { hindi: 'लोहा', transliteration: 'loha', phonetic: 'LO-ha', english: 'Iron', emoji: '🔧', gender: 'm', example_hi: 'लोहा मज़बूत है।', example_translit: '(loha mazboot hai)', example_en: 'Iron is strong.', trick: 'LOW-ha iron' }
+            ],
+            'J': [
+                { hindi: 'कूदना', transliteration: 'koodna', phonetic: 'KOOD-na', english: 'Jump', emoji: '🦘', gender: 'v', example_hi: 'बच्चा कूद रहा है।', example_translit: '(bachcha kood raha hai)', example_en: 'The child is jumping.', trick: 'COULD-na jump' },
+                { hindi: 'जूस', transliteration: 'juice', phonetic: 'juice', english: 'Juice', emoji: '🧃', gender: 'm', example_hi: 'जूस मीठा है।', example_translit: '(juice meetha hai)', example_en: 'The juice is sweet.', trick: 'JUICE same!' },
+                { hindi: 'जंगल', transliteration: 'jangal', phonetic: 'JUN-gul', english: 'Jungle', emoji: '🌳', gender: 'm', example_hi: 'जंगल हरा है।', example_translit: '(jangal hara hai)', example_en: 'The jungle is green.', trick: 'JUNGLE jangal!' },
+                { hindi: 'जार', transliteration: 'jaar', phonetic: 'jaar', english: 'Jar', emoji: '🏺', gender: 'm', example_hi: 'जार में पानी है।', example_translit: '(jaar mein paani hai)', example_en: 'There is water in the jar.', trick: 'JAR jaar!' }
+            ],
+            'K': [
+                { hindi: 'चाबी', transliteration: 'chaabi', phonetic: 'CHAA-bee', english: 'Key', emoji: '🔑', gender: 'f', example_hi: 'चाबी छोटी है।', example_translit: '(chaabi chhoti hai)', example_en: 'The key is small.', trick: 'CHAA-bee unlock' },
+                { hindi: 'पतंग', transliteration: 'patang', phonetic: 'pa-TUNG', english: 'Kite', emoji: '🪁', gender: 'f', example_hi: 'पतंग उड़ रही है।', example_translit: '(patang ud rahi hai)', example_en: 'The kite is flying.', trick: 'PATANG flying' },
+                { hindi: 'राजा', transliteration: 'raaja', phonetic: 'RAA-ja', english: 'King', emoji: '👑', gender: 'm', example_hi: 'राजा महान है।', example_translit: '(raaja mahaan hai)', example_en: 'The king is great.', trick: 'RAJA rules!' },
+                { hindi: 'चाकू', transliteration: 'chaaku', phonetic: 'CHAA-koo', english: 'Knife', emoji: '🔪', gender: 'm', example_hi: 'चाकू तेज़ है।', example_translit: '(chaaku tez hai)', example_en: 'The knife is sharp.', trick: 'CHAA-koo cuts' }
+            ],
+            'L': [
+                { hindi: 'सिंह', transliteration: 'singh', phonetic: 'singh', english: 'Lion', emoji: '🦁', gender: 'm', example_hi: 'सिंह जंगल का राजा है।', example_translit: '(singh jangal ka raaja hai)', example_en: 'The lion is the king of the jungle.', trick: 'SING-h roars' },
+                { hindi: 'पत्ता', transliteration: 'patta', phonetic: 'PUT-ta', english: 'Leaf', emoji: '🍃', gender: 'm', example_hi: 'पत्ता हरा है।', example_translit: '(patta hara hai)', example_en: 'The leaf is green.', trick: 'PUT-ta leaf' },
+                { hindi: 'नींबू', transliteration: 'neembu', phonetic: 'NEEM-boo', english: 'Lemon', emoji: '🍋', gender: 'm', example_hi: 'नींबू खट्टा है।', example_translit: '(neembu khatta hai)', example_en: 'The lemon is sour.', trick: 'NEEM-boo sour' },
+                { hindi: 'सीढ़ी', transliteration: 'seedhi', phonetic: 'SEE-dhee', english: 'Ladder', emoji: '🪜', gender: 'f', example_hi: 'सीढ़ी ऊँची है।', example_translit: '(seedhi oonchi hai)', example_en: 'The ladder is tall.', trick: 'SEED-hee climb' }
+            ],
+            'M': [
+                { hindi: 'बंदर', transliteration: 'bandar', phonetic: 'BUN-dur', english: 'Monkey', emoji: '🐒', gender: 'm', example_hi: 'बंदर पेड़ पर है।', example_translit: '(bandar ped par hai)', example_en: 'The monkey is on the tree.', trick: 'BUNDER monkey' },
+                { hindi: 'चाँद', transliteration: 'chaand', phonetic: 'chaand', english: 'Moon', emoji: '🌙', gender: 'm', example_hi: 'चाँद चमक रहा है।', example_translit: '(chaand chamak raha hai)', example_en: 'The moon is shining.', trick: 'CHAND moon' },
+                { hindi: 'दूध', transliteration: 'doodh', phonetic: 'doodh', english: 'Milk', emoji: '🥛', gender: 'm', example_hi: 'दूध सफ़ेद है।', example_translit: '(doodh safed hai)', example_en: 'Milk is white.', trick: 'DUDE milk' },
+                { hindi: 'माँ', transliteration: 'maa', phonetic: 'maa', english: 'Mother', emoji: '👩', gender: 'f', example_hi: 'माँ प्यारी है।', example_translit: '(maa pyaari hai)', example_en: 'Mother is lovely.', trick: 'MAA universal!' }
+            ],
+            'N': [
+                { hindi: 'नाक', transliteration: 'naak', phonetic: 'naak', english: 'Nose', emoji: '👃', gender: 'f', example_hi: 'नाक से साँस लो।', example_translit: '(naak se saans lo)', example_en: 'Breathe through your nose.', trick: 'KNOCK nose' },
+                { hindi: 'रात', transliteration: 'raat', phonetic: 'raat', english: 'Night', emoji: '🌃', gender: 'f', example_hi: 'रात अंधेरी है।', example_translit: '(raat andheri hai)', example_en: 'The night is dark.', trick: 'RAT at night' },
+                { hindi: 'गर्दन', transliteration: 'gardan', phonetic: 'GUR-dun', english: 'Neck', emoji: '🦒', gender: 'f', example_hi: 'गर्दन लंबी है।', example_translit: '(gardan lambi hai)', example_en: 'The neck is long.', trick: 'GARDEN neck' },
+                { hindi: 'जाल', transliteration: 'jaal', phonetic: 'jaal', english: 'Net', emoji: '🥅', gender: 'm', example_hi: 'मछली जाल में है।', example_translit: '(machhli jaal mein hai)', example_en: 'The fish is in the net.', trick: 'JAIL net' }
+            ],
+            'O': [
+                { hindi: 'संतरा', transliteration: 'santara', phonetic: 'sun-ta-RAA', english: 'Orange', emoji: '🍊', gender: 'm', example_hi: 'संतरा मीठा है।', example_translit: '(santara meetha hai)', example_en: 'The orange is sweet.', trick: 'SANTA-ra orange' },
+                { hindi: 'उल्लू', transliteration: 'ullu', phonetic: 'UL-loo', english: 'Owl', emoji: '🦉', gender: 'm', example_hi: 'उल्लू रात में जागता है।', example_translit: '(ullu raat mein jaagta hai)', example_en: 'The owl stays awake at night.', trick: 'OWL-oo says' },
+                { hindi: 'बैल', transliteration: 'bail', phonetic: 'bail', english: 'Ox', emoji: '🐂', gender: 'm', example_hi: 'बैल मज़बूत है।', example_translit: '(bail mazboot hai)', example_en: 'The ox is strong.', trick: 'BAIL ox out' },
+                { hindi: 'समुद्र', transliteration: 'samudra', phonetic: 'sa-MU-dra', english: 'Ocean', emoji: '🌊', gender: 'm', example_hi: 'समुद्र गहरा है।', example_translit: '(samudra gehra hai)', example_en: 'The ocean is deep.', trick: 'SOME ocean' }
+            ],
+            'P': [
+                { hindi: 'कलम', transliteration: 'kalam', phonetic: 'ka-LUM', english: 'Pen', emoji: '✒️', gender: 'f', example_hi: 'कलम से लिखो।', example_translit: '(kalam se likho)', example_en: 'Write with a pen.', trick: 'COLUMN pen' },
+                { hindi: 'तोता', transliteration: 'tota', phonetic: 'TO-ta', english: 'Parrot', emoji: '🦜', gender: 'm', example_hi: 'तोता हरा है।', example_translit: '(tota hara hai)', example_en: 'The parrot is green.', trick: 'TOTE-a parrot' },
+                { hindi: 'सुअर', transliteration: 'suar', phonetic: 'SOO-ur', english: 'Pig', emoji: '🐷', gender: 'm', example_hi: 'सुअर गुलाबी है।', example_translit: '(suar gulaabi hai)', example_en: 'The pig is pink.', trick: 'SEWER pig' },
+                { hindi: 'पौधा', transliteration: 'paudha', phonetic: 'PAU-dha', english: 'Plant', emoji: '🌱', gender: 'm', example_hi: 'पौधा बढ़ रहा है।', example_translit: '(paudha badh raha hai)', example_en: 'The plant is growing.', trick: 'POT-dha plant' }
+            ],
+            'Q': [
+                { hindi: 'रानी', transliteration: 'raani', phonetic: 'RAA-nee', english: 'Queen', emoji: '👸', gender: 'f', example_hi: 'रानी सुंदर है।', example_translit: '(raani sundar hai)', example_en: 'The queen is beautiful.', trick: 'RANI queen' },
+                { hindi: 'रजाई', transliteration: 'rajaai', phonetic: 'ra-JAA-ee', english: 'Quilt', emoji: '🛏️', gender: 'f', example_hi: 'रजाई गर्म है।', example_translit: '(rajaai garam hai)', example_en: 'The quilt is warm.', trick: 'RAJA-ee quilt' },
+                { hindi: 'शांत', transliteration: 'shaant', phonetic: 'shaant', english: 'Quiet', emoji: '🤫', gender: 'adj', example_hi: 'कमरा शांत है।', example_translit: '(kamra shaant hai)', example_en: 'The room is quiet.', trick: 'SHANT quiet' },
+                { hindi: 'प्रश्न', transliteration: 'prashna', phonetic: 'PRUSH-na', english: 'Question', emoji: '❓', gender: 'm', example_hi: 'प्रश्न कठिन है।', example_translit: '(prashna kathin hai)', example_en: 'The question is difficult.', trick: 'PRUSH question' }
+            ],
+            'R': [
+                { hindi: 'खरगोश', transliteration: 'khargosh', phonetic: 'KHUR-gosh', english: 'Rabbit', emoji: '🐰', gender: 'm', example_hi: 'खरगोश तेज़ दौड़ता है।', example_translit: '(khargosh tez daudta hai)', example_en: 'The rabbit runs fast.', trick: 'CAR-gosh rabbit' },
+                { hindi: 'बारिश', transliteration: 'baarish', phonetic: 'BAA-rish', english: 'Rain', emoji: '🌧️', gender: 'f', example_hi: 'बारिश हो रही है।', example_translit: '(baarish ho rahi hai)', example_en: 'It is raining.', trick: 'BAR-ish rain' },
+                { hindi: 'नदी', transliteration: 'nadi', phonetic: 'na-DEE', english: 'River', emoji: '🏞️', gender: 'f', example_hi: 'नदी बह रही है।', example_translit: '(nadi beh rahi hai)', example_en: 'The river is flowing.', trick: 'NAUGHTY river' },
+                { hindi: 'गुलाब', transliteration: 'gulaab', phonetic: 'gu-LAAB', english: 'Rose', emoji: '🌹', gender: 'm', example_hi: 'गुलाब लाल है।', example_translit: '(gulaab laal hai)', example_en: 'The rose is red.', trick: 'GOO-lab rose' }
+            ],
+            'S': [
+                { hindi: 'सूरज', transliteration: 'suraj', phonetic: 'SOO-ruj', english: 'Sun', emoji: '☀️', gender: 'm', example_hi: 'सूरज चमक रहा है।', example_translit: '(suraj chamak raha hai)', example_en: 'The sun is shining.', trick: 'SOOR-age sun' },
+                { hindi: 'तारा', transliteration: 'taara', phonetic: 'TAA-ra', english: 'Star', emoji: '⭐', gender: 'm', example_hi: 'तारा चमक रहा है।', example_translit: '(taara chamak raha hai)', example_en: 'The star is shining.', trick: 'TIARA stars' },
+                { hindi: 'साँप', transliteration: 'saanp', phonetic: 'saanp', english: 'Snake', emoji: '🐍', gender: 'm', example_hi: 'साँप लंबा है।', example_translit: '(saanp lamba hai)', example_en: 'The snake is long.', trick: 'SNAP snake' },
+                { hindi: 'जूता', transliteration: 'joota', phonetic: 'JOO-ta', english: 'Shoe', emoji: '👞', gender: 'm', example_hi: 'जूता नया है।', example_translit: '(joota naya hai)', example_en: 'The shoe is new.', trick: 'JUSTa shoe' }
+            ],
+            'T': [
+                { hindi: 'ट्रेन', transliteration: 'train', phonetic: 'train', english: 'Train', emoji: '🚂', gender: 'f', example_hi: 'ट्रेन आ रही है।', example_translit: '(train aa rahi hai)', example_en: 'The train is coming.', trick: 'TRAIN same!' },
+                { hindi: 'पेड़', transliteration: 'ped', phonetic: 'ped', english: 'Tree', emoji: '🌲', gender: 'm', example_hi: 'पेड़ हरा है।', example_translit: '(ped hara hai)', example_en: 'The tree is green.', trick: 'PAID tree' },
+                { hindi: 'बाघ', transliteration: 'baagh', phonetic: 'baagh', english: 'Tiger', emoji: '🐅', gender: 'm', example_hi: 'बाघ शक्तिशाली है।', example_translit: '(baagh shaktishaali hai)', example_en: 'The tiger is powerful.', trick: 'BAG tiger' },
+                { hindi: 'कछुआ', transliteration: 'kachhua', phonetic: 'kuch-HOO-aa', english: 'Turtle', emoji: '🐢', gender: 'm', example_hi: 'कछुआ धीरे चलता है।', example_translit: '(kachhua dheere chalta hai)', example_en: 'The turtle walks slowly.', trick: 'CATCH turtle' }
+            ],
+            'U': [
+                { hindi: 'छाता', transliteration: 'chhaata', phonetic: 'CHHAA-ta', english: 'Umbrella', emoji: '☂️', gender: 'm', example_hi: 'छाता बड़ा है।', example_translit: '(chhaata bada hai)', example_en: 'The umbrella is big.', trick: 'CHATA umbrella' },
+                { hindi: 'ऊपर', transliteration: 'oopar', phonetic: 'OO-pur', english: 'Up', emoji: '⬆️', gender: 'adv', example_hi: 'ऊपर देखो।', example_translit: '(oopar dekho)', example_en: 'Look up.', trick: 'UPPER up' },
+                { hindi: 'काका', transliteration: 'kaaka', phonetic: 'KAA-ka', english: 'Uncle', emoji: '👨', gender: 'm', example_hi: 'काका आए हैं।', example_translit: '(kaaka aaye hain)', example_en: 'Uncle has come.', trick: 'KAKA uncle' },
+                { hindi: 'वर्दी', transliteration: 'vardi', phonetic: 'vur-DEE', english: 'Uniform', emoji: '🥋', gender: 'f', example_hi: 'वर्दी साफ़ है।', example_translit: '(vardi saaf hai)', example_en: 'The uniform is clean.', trick: 'WARDY uniform' }
+            ],
+            'V': [
+                { hindi: 'गाँव', transliteration: 'gaanv', phonetic: 'gaanv', english: 'Village', emoji: '🏘️', gender: 'm', example_hi: 'गाँव शांत है।', example_translit: '(gaanv shaant hai)', example_en: 'The village is quiet.', trick: 'GONE village' },
+                { hindi: 'सब्ज़ी', transliteration: 'sabzi', phonetic: 'SUB-zee', english: 'Vegetable', emoji: '🥦', gender: 'f', example_hi: 'सब्ज़ी ताज़ी है।', example_translit: '(sabzi taazi hai)', example_en: 'The vegetable is fresh.', trick: 'SUB-zee fresh' },
+                { hindi: 'फूलदान', transliteration: 'phooldaan', phonetic: 'phool-DAAN', english: 'Vase', emoji: '🏺', gender: 'm', example_hi: 'फूलदान में फूल हैं।', example_translit: '(phooldaan mein phool hain)', example_en: 'There are flowers in the vase.', trick: 'FULL-dan vase' },
+                { hindi: 'आवाज़', transliteration: 'aawaaz', phonetic: 'aa-WAAZ', english: 'Voice', emoji: '🗣️', gender: 'f', example_hi: 'आवाज़ मधुर है।', example_translit: '(aawaaz madhur hai)', example_en: 'The voice is sweet.', trick: 'AWAZ voice' }
+            ],
+            'W': [
+                { hindi: 'पानी', transliteration: 'paani', phonetic: 'PAA-nee', english: 'Water', emoji: '💧', gender: 'm', example_hi: 'पानी ठंडा है।', example_translit: '(paani thanda hai)', example_en: 'The water is cold.', trick: 'PONY water' },
+                { hindi: 'खिड़की', transliteration: 'khidki', phonetic: 'KHID-kee', english: 'Window', emoji: '🪟', gender: 'f', example_hi: 'खिड़की खुली है।', example_translit: '(khidki khuli hai)', example_en: 'The window is open.', trick: 'KID-key window' },
+                { hindi: 'भेड़िया', transliteration: 'bhediya', phonetic: 'BHAY-dee-ya', english: 'Wolf', emoji: '🐺', gender: 'm', example_hi: 'भेड़िया जंगल में है।', example_translit: '(bhediya jangal mein hai)', example_en: 'The wolf is in the jungle.', trick: 'BABY wolf' },
+                { hindi: 'घड़ी', transliteration: 'ghadi', phonetic: 'GHA-dee', english: 'Watch', emoji: '⌚', gender: 'f', example_hi: 'घड़ी में समय देखो।', example_translit: '(ghadi mein samay dekho)', example_en: 'Look at the time in the watch.', trick: 'GLADLY watch' }
+            ],
+            'X': [
+                { hindi: 'एक्स-रे', transliteration: 'x-ray', phonetic: 'eks-ray', english: 'X-ray', emoji: '📷', gender: 'm', example_hi: 'एक्स-रे ज़रूरी है।', example_translit: '(x-ray zaroori hai)', example_en: 'An X-ray is necessary.', trick: 'X-RAY same!' },
+                { hindi: 'ज़ाइलोफ़ोन', transliteration: 'xylophone', phonetic: 'ZAI-lo-phone', english: 'Xylophone', emoji: '🎹', gender: 'm', example_hi: 'ज़ाइलोफ़ोन बजाओ।', example_translit: '(xylophone bajao)', example_en: 'Play the xylophone.', trick: 'XYLOPHONE music' },
+                { hindi: 'क्रिसमस', transliteration: 'christmas', phonetic: 'KRIS-mas', english: 'Xmas', emoji: '🎄', gender: 'm', example_hi: 'क्रिसमस का त्योहार।', example_translit: '(christmas ka tyohaar)', example_en: 'The festival of Christmas.', trick: 'CHRISTMAS xmas' },
+                { hindi: 'अतिरिक्त', transliteration: 'atirikt', phonetic: 'a-ti-RIKT', english: 'eXtra', emoji: '➕', gender: 'adj', example_hi: 'अतिरिक्त समय।', example_translit: '(atirikt samay)', example_en: 'Extra time.', trick: 'ATIRIKT extra' }
+            ],
+            'Y': [
+                { hindi: 'पीला', transliteration: 'peela', phonetic: 'PEE-la', english: 'Yellow', emoji: '🟡', gender: 'adj', example_hi: 'सूरज पीला है।', example_translit: '(suraj peela hai)', example_en: 'The sun is yellow.', trick: 'PEEL-a yellow' },
+                { hindi: 'दही', transliteration: 'dahi', phonetic: 'da-HEE', english: 'Yogurt', emoji: '🥛', gender: 'm', example_hi: 'दही ठंडा है।', example_translit: '(dahi thanda hai)', example_en: 'The yogurt is cold.', trick: 'THE yogurt' },
+                { hindi: 'जम्हाई', transliteration: 'jamhaai', phonetic: 'jum-HAA-ee', english: 'Yawn', emoji: '🥱', gender: 'f', example_hi: 'जम्हाई आ रही है।', example_translit: '(jamhaai aa rahi hai)', example_en: 'I am yawning.', trick: 'JAM-hai yawn' },
+                { hindi: 'याक', transliteration: 'yak', phonetic: 'yak', english: 'Yak', emoji: '🐂', gender: 'm', example_hi: 'याक पहाड़ों में रहता है।', example_translit: '(yak pahaadon mein rehta hai)', example_en: 'The yak lives in the mountains.', trick: 'YAK is yak!' }
+            ],
+            'Z': [
+                { hindi: 'शून्य', transliteration: 'shoonya', phonetic: 'SHOON-ya', english: 'Zero', emoji: '0️⃣', gender: 'm', example_hi: 'शून्य से शुरू करो।', example_translit: '(shoonya se shuru karo)', example_en: 'Start from zero.', trick: 'SOON-ya zero' },
+                { hindi: 'चिड़ियाघर', transliteration: 'chidiyaghar', phonetic: 'chi-DEE-ya-ghar', english: 'Zoo', emoji: '🦁', gender: 'm', example_hi: 'चिड़ियाघर में जानवर हैं।', example_translit: '(chidiyaghar mein jaanwar hain)', example_en: 'There are animals in the zoo.', trick: 'CHIDIYA zoo' },
+                { hindi: 'ज़ेबरा', transliteration: 'zebra', phonetic: 'ZEB-ra', english: 'Zebra', emoji: '🦓', gender: 'm', example_hi: 'ज़ेबरा काला और सफ़ेद है।', example_translit: '(zebra kaala aur safed hai)', example_en: 'The zebra is black and white.', trick: 'ZEBRA same!' },
+                { hindi: 'ज़िप', transliteration: 'zip', phonetic: 'zip', english: 'Zip', emoji: '🤐', gender: 'f', example_hi: 'ज़िप बंद करो।', example_translit: '(zip band karo)', example_en: 'Close the zip.', trick: 'ZIP is zip!' }
+            ]
+        };
+
+        const wordCategories = {
+            'Animals': {
+                emoji: '🦁',
+                words: [
+                    { hindi: 'शेर', transliteration: 'sher', english: 'Lion', phonetic: 'shear' },
+                    { hindi: 'हिरण', transliteration: 'hiran', english: 'Deer', phonetic: 'hi-RUN' },
+                    { hindi: 'चूहा', transliteration: 'chooha', english: 'Mouse', phonetic: 'CHOO-ha' },
+                    { hindi: 'मोर', transliteration: 'mor', english: 'Peacock', phonetic: 'more' },
+                    { hindi: 'कबूतर', transliteration: 'kabootar', english: 'Pigeon', phonetic: 'ka-BOO-tur' },
+                    { hindi: 'मुर्गी', transliteration: 'murgi', english: 'Chicken', phonetic: 'MUR-gee' }
+                ]
+            },
+            'Colors': {
+                emoji: '🎨',
+                words: [
+                    { hindi: 'लाल', transliteration: 'laal', english: 'Red', phonetic: 'laal' },
+                    { hindi: 'नीला', transliteration: 'neela', english: 'Blue', phonetic: 'NEE-la' },
+                    { hindi: 'हरा', transliteration: 'hara', english: 'Green', phonetic: 'ha-RAA' },
+                    { hindi: 'काला', transliteration: 'kaala', english: 'Black', phonetic: 'KAA-la' },
+                    { hindi: 'सफ़ेद', transliteration: 'safed', english: 'White', phonetic: 'sa-FED' },
+                    { hindi: 'गुलाबी', transliteration: 'gulaabi', english: 'Pink', phonetic: 'gu-LAA-bee' },
+                    { hindi: 'नारंगी', transliteration: 'narangi', english: 'Orange', phonetic: 'na-RUN-gee' },
+                    { hindi: 'बैंगनी', transliteration: 'baingani', english: 'Purple', phonetic: 'BAIN-ga-nee' },
+                    { hindi: 'भूरा', transliteration: 'bhoora', english: 'Brown', phonetic: 'BHOO-ra' }
+                ]
+            },
+            'Numbers': {
+                emoji: '🔢',
+                words: [
+                    { hindi: 'एक', transliteration: 'ek', english: 'One', phonetic: 'ek' },
+                    { hindi: 'दो', transliteration: 'do', english: 'Two', phonetic: 'doe' },
+                    { hindi: 'तीन', transliteration: 'teen', english: 'Three', phonetic: 'teen' },
+                    { hindi: 'चार', transliteration: 'chaar', english: 'Four', phonetic: 'chaar' },
+                    { hindi: 'पाँच', transliteration: 'paanch', english: 'Five', phonetic: 'paanch' },
+                    { hindi: 'छह', transliteration: 'chhah', english: 'Six', phonetic: 'chheh' },
+                    { hindi: 'सात', transliteration: 'saat', english: 'Seven', phonetic: 'saat' },
+                    { hindi: 'आठ', transliteration: 'aath', english: 'Eight', phonetic: 'aath' },
+                    { hindi: 'नौ', transliteration: 'nau', english: 'Nine', phonetic: 'now' },
+                    { hindi: 'दस', transliteration: 'das', english: 'Ten', phonetic: 'dus' }
+                ]
+            },
+            'Body': {
+                emoji: '👤',
+                words: [
+                    { hindi: 'सिर', transliteration: 'sir', english: 'Head', phonetic: 'sir' },
+                    { hindi: 'मुँह', transliteration: 'munh', english: 'Mouth', phonetic: 'moon' },
+                    { hindi: 'पैर', transliteration: 'pair', english: 'Foot', phonetic: 'pair' },
+                    { hindi: 'पेट', transliteration: 'pet', english: 'Stomach', phonetic: 'pate' },
+                    { hindi: 'पीठ', transliteration: 'peeth', english: 'Back', phonetic: 'peeth' },
+                    { hindi: 'दिल', transliteration: 'dil', english: 'Heart', phonetic: 'dil' }
+                ]
+            },
+            'Food': {
+                emoji: '🍽️',
+                words: [
+                    { hindi: 'चावल', transliteration: 'chaawal', english: 'Rice', phonetic: 'CHAA-vul' },
+                    { hindi: 'दाल', transliteration: 'daal', english: 'Lentils', phonetic: 'daal' },
+                    { hindi: 'चाय', transliteration: 'chai', english: 'Tea', phonetic: 'chai' },
+                    { hindi: 'नमक', transliteration: 'namak', english: 'Salt', phonetic: 'na-MUK' },
+                    { hindi: 'चीनी', transliteration: 'cheeni', english: 'Sugar', phonetic: 'CHEE-nee' },
+                    { hindi: 'मिर्च', transliteration: 'mirch', english: 'Chili', phonetic: 'mirch' }
+                ]
+            }
+        };
+
+        const phrasesDB = {
+            'Greetings': [
+                { english: 'Hello', hindi: 'नमस्ते', transliteration: 'namaste', phonetic: 'na-ma-STAY', context: 'Universal greeting' },
+                { english: 'How are you?', hindi: 'आप कैसे हैं?', transliteration: 'aap kaise hain?', phonetic: 'aap KAI-say hain', context: 'Formal' },
+                { english: 'Thank you', hindi: 'धन्यवाद', transliteration: 'dhanyavaad', phonetic: 'dhun-ya-VAAD', context: 'Gratitude' },
+                { english: 'Please', hindi: 'कृपया', transliteration: 'kripaya', phonetic: 'kri-pa-YAA', context: 'Polite request' },
+                { english: 'Sorry', hindi: 'माफ़ कीजिये', transliteration: 'maaf keejiye', phonetic: 'maaf KEE-ji-yay', context: 'Apology' }
+            ],
+            'Family': [
+                { english: 'I love you', hindi: 'मैं तुमसे प्यार करता हूँ', transliteration: 'main tumse pyaar karta hun', phonetic: 'main TUM-say pyaar KAR-ta hoon', context: 'Male speaker' },
+                { english: 'Mother', hindi: 'माँ', transliteration: 'maa', phonetic: 'maa', context: 'Mom' },
+                { english: 'Father', hindi: 'पिता जी', transliteration: 'pita ji', phonetic: 'PI-ta jee', context: 'Dad' },
+                { english: 'Brother', hindi: 'भाई', transliteration: 'bhai', phonetic: 'bhaai', context: 'Sibling' },
+                { english: 'Sister', hindi: 'बहन', transliteration: 'bahan', phonetic: 'ba-HAN', context: 'Sibling' }
+            ],
+            'Food': [
+                { english: 'I am hungry', hindi: 'मुझे भूख लगी है', transliteration: 'mujhe bhookh lagi hai', phonetic: 'MU-jhay bhookh LA-gee hai', context: 'Hunger' },
+                { english: 'Water please', hindi: 'पानी दीजिये', transliteration: 'paani deejiye', phonetic: 'PAA-nee DEE-ji-yay', context: 'Request' },
+                { english: 'Delicious', hindi: 'स्वादिष्ट', transliteration: 'swaadisht', phonetic: 'swaa-DISHT', context: 'Compliment' },
+                { english: 'No spicy', hindi: 'तीखा नहीं', transliteration: 'teekha nahin', phonetic: 'TEE-kha na-HEEN', context: 'Mild food' },
+                { english: 'Tea or coffee?', hindi: 'चाय या कॉफ़ी?', transliteration: 'chai ya coffee?', phonetic: 'chai yaa COFFEE', context: 'Beverage' }
+            ],
+            'Travel': [
+                { english: 'How much?', hindi: 'कितना?', transliteration: 'kitna?', phonetic: 'KIT-na', context: 'Price' },
+                { english: 'Where is?', hindi: 'कहाँ है?', transliteration: 'kahaan hai?', phonetic: 'ka-HAAN hai', context: 'Location' },
+                { english: 'Stop here', hindi: 'यहाँ रोकिये', transliteration: 'yahaan rokiye', phonetic: 'ya-HAAN RO-ki-yay', context: 'To driver' },
+                { english: 'Left/Right', hindi: 'बाएं/दाएं', transliteration: 'baayen/daayen', phonetic: 'BAA-yen/DAA-yen', context: 'Direction' },
+                { english: 'Hotel', hindi: 'होटल', transliteration: 'hotel', phonetic: 'ho-TEL', context: 'Accommodation' }
+            ],
+            'Emergency': [
+                { english: 'Help!', hindi: 'मदद!', transliteration: 'madad!', phonetic: 'ma-DAD', context: 'Emergency' },
+                { english: 'Doctor', hindi: 'डॉक्टर', transliteration: 'doctor', phonetic: 'DOCTOR', context: 'Medical' },
+                { english: 'Police', hindi: 'पुलिस', transliteration: 'police', phonetic: 'pu-LEES', context: 'Safety' },
+                { english: 'Hospital', hindi: 'अस्पताल', transliteration: 'aspataal', phonetic: 'us-pa-TAAL', context: 'Medical' },
+                { english: 'Emergency', hindi: 'आपातकाल', transliteration: 'aapaatkaal', phonetic: 'aa-PAAT-kaal', context: 'Crisis' }
+            ]
+        };
+
+        const translations = {
+            'EN': {
+                'app-title': 'Family Hindi Learning',
+                'app-subtitle': '90-Day Digital Workbook',
+                'alphabet-title': 'Your Alphabet Journey',
+                'words-title': 'Learn Words by Category',
+                'phrases-title': 'Essential Phrases',
+                'swipe-hint': '← Swipe cards to explore →',
+                'history-title': 'Your Learning History',
+                'quiz-title': 'Practice Quiz',
+                'tab-today': 'Today',
+                'tab-alphabet': 'A-Z',
+                'tab-words': 'Words',
+                'tab-phrases': 'Phrases',
+                'tab-history': 'History',
+                'tab-quiz': 'Quiz',
+                'tab-stats': 'Stats'
+            },
+            'HI': {
+                'app-title': 'परिवार हिंदी सीखना',
+                'app-subtitle': '९० दिन की कार्यपुस्तिका',
+                'alphabet-title': 'आपकी वर्णमाला यात्रा',
+                'words-title': 'श्रेणी के अनुसार शब्द',
+                'phrases-title': 'आवश्यक वाक्यांश',
+                'swipe-hint': '← कार्ड स्वाइप करें →',
+                'history-title': 'आपका इतिहास',
+                'quiz-title': 'अभ्यास प्रश्न',
+                'tab-today': 'आज',
+                'tab-alphabet': 'अ-ज्ञ',
+                'tab-words': 'शब्द',
+                'tab-phrases': 'वाक्य',
+                'tab-history': 'इतिहास',
+                'tab-quiz': 'प्रश्न',
+                'tab-stats': 'आंकड़े'
+            }
+        };
+
+        const defaultState = {
+            wordsViewed: [],
+            phrasesViewed: [],
+            dailyAccess: [],
+            quizAttempts: [],
+            audioPlayCounts: {},
+            lastVisit: null,
+            unlockedLetters: ['A'],
+            interfaceLanguage: 'EN',
+            achievements: [],
+            currentStreak: 0,
+            longestStreak: 0,
+        };
+
+        let appState = { ...defaultState };
+
+        function initApp() {
+            loadState();
+            applyTranslations();
+            updateTodayWord();
+            initAlphabetGrid();
+            initWordsCategories();
+            initPhrases();
+            updateHistory();
+            initQuiz();
+            updateStats();
+            trackDailyAccess();
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('hindiAppState');
+            if (saved) {
+                try {
+                    appState = { ...defaultState, ...JSON.parse(saved) };
+                } catch (e) {
+                    console.error('Error loading state:', e);
+                    appState = { ...defaultState };
+                }
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('hindiAppState', JSON.stringify(appState));
+            } catch (e) {
+                console.error('Error saving state:', e);
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show ' + type;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function trackDailyAccess() {
+            const today = new Date().toDateString();
+            if (!appState.dailyAccess.includes(today)) {
+                appState.dailyAccess.push(today);
+
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayStr = yesterday.toDateString();
+
+                if (appState.dailyAccess.includes(yesterdayStr)) {
+                    appState.currentStreak++;
+                } else {
+                    appState.currentStreak = 1;
+                }
+
+                if (appState.currentStreak > appState.longestStreak) {
+                    appState.longestStreak = appState.currentStreak;
+                }
+
+                checkAchievements();
+                saveState();
+            }
+
+            appState.lastVisit = new Date().toISOString();
+            saveState();
+        }
+
+        function getTodayWord() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            const allWords = Object.values(alphabetWords).flat();
+            const wordIndex = dayOfYear % allWords.length;
+            return allWords[wordIndex];
+        }
+
+        function updateTodayWord() {
+            const word = getTodayWord();
+
+            document.getElementById('todayEmoji').textContent = word.emoji;
+            document.getElementById('todayHindi').textContent = word.hindi;
+            document.getElementById('todayTranslit').textContent = word.transliteration;
+            document.getElementById('todayPhonetic').textContent = `🗣️ ${word.phonetic}`;
+            document.getElementById('todayMeaning').textContent = word.english;
+            document.getElementById('todayGender').textContent = word.gender && !['v', 'adj', 'adv'].includes(word.gender) ?
+                'Gender: ' + (word.gender === 'm' ? 'Masculine' : 'Feminine') : '';
+            document.getElementById('todayExample').innerHTML = `<strong>Example:</strong><br>${word.example_hi}<br><em style="color: var(--secondary);">${word.example_translit}</em><br><em>${word.example_en}</em>`;
+            document.getElementById('todayTrick').innerHTML = '<strong>Memory Trick:</strong><br>' + word.trick;
+
+            const isViewed = appState.wordsViewed.find(w => w.hindi === word.hindi);
+            if (!isViewed) {
+                appState.wordsViewed.push({
+                    hindi: word.hindi,
+                    english: word.english,
+                    transliteration: word.transliteration,
+                    viewedAt: new Date().toISOString()
+                });
+                saveState();
+            }
+        }
+
+        function playAudio(type, text) {
+            let audioText = text;
+            if (type === 'today') {
+                const word = getTodayWord();
+                audioText = word.hindi;
+            }
+
+            if (audioText) {
+                const audio = document.getElementById('audioPlayer');
+                audio.src = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=hi&client=tw-ob&q=' + encodeURIComponent(audioText);
+                audio.play().catch(e => console.error("Audio play failed:", e));
+
+                if (!appState.audioPlayCounts[audioText]) {
+                    appState.audioPlayCounts[audioText] = 0;
+                }
+                appState.audioPlayCounts[audioText]++;
+                saveState();
+            }
+        }
+
+        function playWordAudioAndMarkViewed(word) {
+            playAudio('', word.hindi);
+            const isViewed = appState.wordsViewed.find(v => v.hindi === word.hindi);
+            if (!isViewed) {
+                appState.wordsViewed.push({
+                    hindi: word.hindi,
+                    english: word.english,
+                    transliteration: word.transliteration,
+                    viewedAt: new Date().toISOString()
+                });
+                saveState();
+                if (document.querySelector('.modal-overlay.show')) {
+                    const h3 = document.querySelector('.modal-content h3');
+                    if (h3 && h3.textContent.includes('Words for Letter')) {
+                        const letter = h3.textContent.split(' ').pop();
+                        showLetterWords(letter);
+                    } else if (h3) {
+                        const categoryName = h3.textContent.trim().split(' ').slice(1).join(' ');
+                        showCategoryWords(categoryName);
+                    }
+                }
+            }
+        }
+
+        function initAlphabetGrid() {
+            const grid = document.getElementById('alphabetGrid');
+            if (!grid) return;
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+            grid.innerHTML = '';
+            letters.forEach((letter, index) => {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+
+                const isUnlocked = appState.unlockedLetters.includes(letter);
+                const isNext = index === appState.unlockedLetters.length;
+
+                if (isUnlocked) {
+                    const letterWords = alphabetWords[letter] || [];
+                    const viewedWords = letterWords.filter(w =>
+                        appState.wordsViewed.find(v => v.hindi === w.hindi)
+                    );
+
+                    if (viewedWords.length === letterWords.length && letterWords.length > 0) {
+                        box.classList.add('completed');
+                        box.innerHTML = letter + '<br>✓';
+
+                        if (index < letters.length - 1 && !appState.unlockedLetters.includes(letters[index + 1])) {
+                            appState.unlockedLetters.push(letters[index + 1]);
+                            saveState();
+                        }
+                    } else if (viewedWords.length > 0) {
+                        box.classList.add('current');
+                        box.innerHTML = `${letter}<br><span style="font-size: 10px;">${viewedWords.length}/${letterWords.length}</span>`;
+                    } else {
+                        box.innerHTML = letter + '<br>📚';
+                    }
+                } else if (isNext) {
+                    box.classList.add('next');
+                    box.innerHTML = letter + '<br>🔓';
+                } else {
+                    box.classList.add('locked');
+                    box.innerHTML = letter + '<br>🔒';
+                }
+
+                box.onclick = function () {
+                    if (isUnlocked) {
+                        showLetterWords(letter);
+                    } else if (isNext) {
+                        showToast('Complete all words in ' + letters[index - 1] + ' first!', 'warning');
+                    } else {
+                        showToast('Complete previous letters to unlock ' + letter + '!', 'warning');
+                    }
+                };
+                grid.appendChild(box);
+            });
+
+            const completedLetters = letters.filter(letter => {
+                if (!appState.unlockedLetters.includes(letter)) return false;
+                const letterWords = alphabetWords[letter] || [];
+                const viewedWords = letterWords.filter(w =>
+                    appState.wordsViewed.find(v => v.hindi === w.hindi)
+                );
+                return viewedWords.length === letterWords.length && letterWords.length > 0;
+            }).length;
+
+            document.getElementById('alphabetProgress').textContent =
+                completedLetters + ' of 26 letters completed • ' + appState.unlockedLetters.length + ' unlocked';
+        }
+
+        function showLetterWords(letter) {
+            const words = alphabetWords[letter] || [];
+            if (words.length === 0) {
+                showToast('No words available for this letter!', 'warning');
+                return;
+            }
+
+            let html = '<h3 style="color: var(--primary); margin-bottom: 15px;">Words for Letter ' + letter + '</h3>';
+            words.forEach(word => {
+                const viewed = appState.wordsViewed.find(v => v.hindi === word.hindi);
+                const wordJson = JSON.stringify(word).replace(/'/g, "&apos;");
+                html += `<div class="word-list-item" style="${viewed ? 'background: #e8f5e9;' : ''}">
+                    <div class="hindi">${word.emoji} ${word.hindi}</div>
+                    <div class="english">${word.english} - ${word.transliteration}</div>
+                    <button class="mini-audio-btn" onclick='playWordAudioAndMarkViewed(${wordJson})' style="float: right; margin-top: -30px;">🔊</button>
+                    </div>`;
+            });
+
+            const modal = document.getElementById('modal');
+            modal.className = 'modal-overlay show';
+            modal.innerHTML = '<div class="modal-content">' + html +
+                '<button class="close-btn" onclick="closeModal()">Close</button></div>';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.className = 'modal-overlay';
+            initAlphabetGrid();
+            initWordsCategories();
+        }
+
+        function initWordsCategories() {
+            const grid = document.getElementById('categoryGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            for (let category in wordCategories) {
+                const cat = wordCategories[category];
+                const viewedWords = cat.words.filter(w =>
+                    appState.wordsViewed.find(v => v.hindi === w.hindi)
+                );
+
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                if (viewedWords.length === cat.words.length && cat.words.length > 0) {
+                    card.classList.add('completed');
+                }
+
+                card.innerHTML = `<div class="emoji">${cat.emoji}</div>
+                    <div class="name">${category}</div>
+                    <div class="count">${viewedWords.length}/${cat.words.length} words</div>`;
+
+                card.onclick = function () { showCategoryWords(category); };
+                grid.appendChild(card);
+            }
+        }
+
+        function showCategoryWords(category) {
+            const cat = wordCategories[category];
+            let html = `<h3 style="color: var(--primary); margin-bottom: 15px;">${cat.emoji} ${category}</h3>`;
+
+            cat.words.forEach(word => {
+                const viewed = appState.wordsViewed.find(v => v.hindi === word.hindi);
+                const wordJson = JSON.stringify(word).replace(/'/g, "&apos;");
+                html += `<div class="word-list-item" style="${viewed ? 'background: #e8f5e9;' : ''}">
+                    <div class="hindi">${word.hindi}</div>
+                    <div class="english">${word.english} - ${word.transliteration}</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 4px;">🗣️ ${word.phonetic}</div>
+                    <button class="mini-audio-btn" onclick='playWordAudioAndMarkViewed(${wordJson})' style="float: right; margin-top: -35px;">🔊</button>
+                    </div>`;
+            });
+
+            const modal = document.getElementById('modal');
+            modal.className = 'modal-overlay show';
+            modal.innerHTML = '<div class="modal-content">' + html +
+                '<button class="close-btn" onclick="closeModal()">Close</button></div>';
+        }
+
+        function initPhrases() {
+            const container = document.getElementById('phrasesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            Object.entries(phrasesDB).forEach(([category, phrases]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'phrase-category';
+
+                const title = document.createElement('h3');
+                title.textContent = category;
+                categoryDiv.appendChild(title);
+
+                const carousel = document.createElement('div');
+                carousel.className = 'phrase-carousel';
+
+                phrases.forEach(phrase => {
+                    const viewed = appState.phrasesViewed.find(p => p.hindi === phrase.hindi);
+                    const card = document.createElement('div');
+                    card.className = 'phrase-card';
+                    if (viewed) {
+                        card.style.background = 'linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%)';
+                    }
+
+                    const phraseJson = JSON.stringify(phrase).replace(/'/g, "&apos;");
+                    card.innerHTML = `<div class="phrase-english">${phrase.english}</div>
+                        <div class="phrase-hindi">${phrase.hindi}</div>
+                        <div class="phrase-transliteration">${phrase.transliteration}</div>
+                        <div style="font-size: 13px; color: #888; margin: 8px 0;">🗣️ ${phrase.phonetic}</div>
+                        <button class="mini-audio-btn" onclick='playPhraseAudio(${phraseJson})' style="margin: 10px auto; display: block;">🔊</button>
+                        <div class="phrase-context">💡 ${phrase.context}</div>`;
+
+                    carousel.appendChild(card);
+                });
+
+                categoryDiv.appendChild(carousel);
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function playPhraseAudio(phrase) {
+            playAudio('', phrase.hindi);
+
+            if (!appState.phrasesViewed.find(p => p.hindi === phrase.hindi)) {
+                appState.phrasesViewed.push({
+                    hindi: phrase.hindi,
+                    english: phrase.english,
+                    transliteration: phrase.transliteration,
+                    category: phrase.category,
+                    viewedAt: new Date().toISOString()
+                });
+                saveState();
+                initPhrases();
+            }
+        }
+
+        function updateHistory() {
+            const container = document.getElementById('historyContainer');
+            if (!container) return;
+            const allItems = [
+                ...appState.wordsViewed.map(w => ({ ...w, type: 'word' })),
+                ...appState.phrasesViewed.map(p => ({ ...p, type: 'phrase' }))
+            ].sort((a, b) => new Date(b.viewedAt) - new Date(a.viewedAt));
+
+            if (allItems.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">No history yet. Start learning!</p>';
+                return;
+            }
+
+            let html = '';
+            let currentDate = '';
+
+            allItems.forEach(item => {
+                const date = new Date(item.viewedAt).toLocaleDateString();
+                if (date !== currentDate) {
+                    currentDate = date;
+                    html += `<div style="font-weight: 600; color: var(--primary); margin: 15px 0 8px; font-size: 14px;">${date}</div>`;
+                }
+
+                const escapedHindi = item.hindi.replace(/'/g, "\\'");
+                html += `<div class="history-item">
+                    <div class="history-content">
+                    <div class="history-date">${new Date(item.viewedAt).toLocaleTimeString()}</div>
+                    <div class="history-word">
+                        ${(item.type === 'word' ? '📖' : '💬')} 
+                        <span class="hindi-script">${item.hindi} (${item.transliteration})</span> - ${item.english}
+                    </div></div>
+                    <button class="mini-audio-btn" onclick="playAudio('', '${escapedHindi}')">🔊</button>
+                    </div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function initQuiz() {
+            const container = document.getElementById('quizContent');
+            if (!container) return;
+            const allLearned = [...appState.wordsViewed, ...appState.phrasesViewed];
+
+            if (allLearned.length < 4) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Learn at least 4 words or phrases to start the quiz!</p>';
+                return;
+            }
+
+            startNewQuiz();
+        }
+
+        function startNewQuiz() {
+            const container = document.getElementById('quizContent');
+            const allLearnedItems = [...appState.wordsViewed, ...appState.phrasesViewed];
+            if (allLearnedItems.length < 4) return;
+
+            // Create a definitive master database with full data for lookups
+            const masterDB = new Map();
+            [
+                ...Object.values(alphabetWords).flat(),
+                ...Object.values(wordCategories).flatMap(cat => cat.words),
+                ...Object.values(phrasesDB).flat()
+            ].forEach(item => {
+                if (!masterDB.has(item.hindi)) {
+                    masterDB.set(item.hindi, item);
+                }
+            });
+
+            // Get a random item from the user's learned history
+            const randomLearnedItem = allLearnedItems[Math.floor(Math.random() * allLearnedItems.length)];
+            // *** FIX: Get the full, complete item from the master DB to avoid missing properties ***
+            const correctItem = masterDB.get(randomLearnedItem.hindi) || randomLearnedItem;
+
+            const types = ['hindi-to-english', 'english-to-hindi', 'audio-to-text'];
+            const quizType = types[Math.floor(Math.random() * types.length)];
+            const isPhrase = !!correctItem.category;
+
+            const options = [correctItem];
+            const sameTypeItems = allLearnedItems.filter(item => !!item.category === isPhrase);
+
+            while (options.length < 4 && options.length < sameTypeItems.length) {
+                const randomItem = sameTypeItems[Math.floor(Math.random() * sameTypeItems.length)];
+                if (!options.find(o => o.hindi === randomItem.hindi)) {
+                    options.push(randomItem);
+                }
+            }
+
+            // *** FIX: Ensure all options have full data by looking them up in the master DB ***
+            const fullOptions = options.map(opt => masterDB.get(opt.hindi) || opt).sort(() => Math.random() - 0.5);
+
+            let questionHtml = `<div class="quiz-type-badge">${isPhrase ? '💬 Phrase Quiz' : '📖 Word Quiz'}</div>`;
+
+            if (quizType === 'hindi-to-english') {
+                questionHtml += `<div class="quiz-question">What does "${correctItem.hindi} (${correctItem.transliteration})" mean?</div>`;
+            } else if (quizType === 'english-to-hindi') {
+                questionHtml += `<div class="quiz-question">How do you say "${correctItem.english}" in Hindi?</div>`;
+            } else {
+                const escapedHindi = correctItem.hindi.replace(/'/g, "\\'");
+                questionHtml += `<div class="quiz-question">Listen and choose the correct ${isPhrase ? 'phrase' : 'word'}:
+                    <button class="audio-btn" onclick="playAudio('', '${escapedHindi}')" style="margin: 15px auto;">🔊</button></div>`;
+            }
+
+            questionHtml += '<div class="quiz-options">';
+            fullOptions.forEach(option => {
+                let displayText;
+                if (quizType === 'english-to-hindi' || quizType === 'audio-to-text') {
+                    displayText = `${option.hindi}<span class="translit">(${option.transliteration})</span>`;
+                } else {
+                    displayText = option.english;
+                }
+                const escapedHindi = option.hindi.replace(/'/g, "\\'");
+                const escapedCorrect = correctItem.hindi.replace(/'/g, "\\'");
+                questionHtml += `<div class="quiz-option" onclick="checkAnswer('${escapedHindi}', '${escapedCorrect}', this)">${displayText}</div>`;
+            });
+            questionHtml += '</div>';
+
+            questionHtml += `<div style="margin-top: 20px; text-align: center;">
+                <button onclick="startNewQuiz()" style="padding: 10px 20px; background: var(--secondary); color: white; border: none; border-radius: 10px; margin: 5px;">Skip</button>
+                <button onclick="startNewQuiz()" style="padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; margin: 5px;">Next Question</button>
+                </div>`;
+
+            container.innerHTML = questionHtml;
+        }
+
+        function checkAnswer(selected, correct, element) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.onclick = null);
+
+            if (selected === correct) {
+                element.classList.add('correct');
+                showToast('Correct! Well done! 🎉', 'success');
+                appState.quizAttempts.push({ correct: true, timestamp: new Date().toISOString() });
+                playAudio('', correct);
+            } else {
+                element.classList.add('incorrect');
+                const allItems = [...appState.wordsViewed, ...appState.phrasesViewed];
+                const correctItem = allItems.find(item => item.hindi === correct);
+
+                options.forEach(opt => {
+                    if (correctItem && (opt.textContent.includes(correctItem.english) || opt.textContent.includes(correct))) {
+                        opt.classList.add('correct');
+                    }
+                });
+                appState.quizAttempts.push({ correct: false, timestamp: new Date().toISOString() });
+            }
+
+            saveState();
+            updateStats();
+        }
+
+        function updateStats() {
+            const container = document.getElementById('statsContainer');
+            if (!container) return;
+
+            const totalWords = appState.wordsViewed.length;
+            const totalPhrases = appState.phrasesViewed.length;
+            const daysActive = appState.dailyAccess.length;
+
+            const allDBWords = [...Object.values(alphabetWords).flat(), ...Object.values(wordCategories).flatMap(cat => cat.words)];
+            const uniqueHindiWords = new Set(allDBWords.map(w => w.hindi));
+            const totalPossibleWords = uniqueHindiWords.size;
+
+            const totalPossiblePhrases = Object.values(phrasesDB).flat().length;
+
+            const wordsProgress = totalPossibleWords > 0 ? (totalWords / totalPossibleWords * 100).toFixed(1) : 0;
+            const phrasesProgress = totalPossiblePhrases > 0 ? (totalPhrases / totalPossiblePhrases * 100).toFixed(1) : 0;
+
+            const correctQuizzes = appState.quizAttempts.filter(q => q.correct).length;
+            const totalQuizzes = appState.quizAttempts.length;
+            const quizAccuracy = totalQuizzes > 0 ? (correctQuizzes / totalQuizzes * 100).toFixed(1) : 0;
+
+            let html = `<div class="stats-card"><h3>📊 Progress Overview</h3>
+                <div class="stat-metric">
+                    <div class="stat-label">Journey Progress</div>
+                    <div class="stat-value">${daysActive} of 90 days</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${Math.min((daysActive / 90 * 100), 100)}%">${Math.min((daysActive / 90 * 100), 100).toFixed(0)}%</div></div>
+                </div>
+                <div class="stat-metric">
+                    <div class="stat-label">Words Learned</div>
+                    <div class="stat-value">${totalWords} of ${totalPossibleWords} words</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${Math.min(wordsProgress, 100)}%">${wordsProgress}%</div></div>
+                </div>
+                <div class="stat-metric">
+                    <div class="stat-label">Phrases Mastered</div>
+                    <div class="stat-value">${totalPhrases} of ${totalPossiblePhrases}</div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: ${phrasesProgress}%">${phrasesProgress}%</div></div>
+                </div>
+                </div>`;
+
+            html += `<div class="stats-card"><h3>🏆 Achievements</h3>`;
+            if (appState.currentStreak > 0) {
+                html += `<div class="achievement">🔥 ${appState.currentStreak} day streak!</div>`;
+            }
+            if (totalWords >= 10) {
+                html += `<div class="achievement">📖 Word Explorer (10+ words)</div>`;
+            }
+            if (totalWords >= 50) {
+                html += `<div class="achievement">🌟 Vocabulary Master (50+ words)</div>`;
+            }
+            if (appState.achievements.length === 0 && appState.currentStreak === 0 && totalWords < 10) {
+                html += `<p style="text-align:center; color: #999; font-size: 13px;">Start learning to earn achievements!</p>`;
+            }
+            html += '</div>';
+
+            html += `<div class="stats-card"><h3>📈 Quiz Performance</h3>
+                <div class="stat-metric">
+                    <div class="stat-label">Quiz Accuracy</div>
+                    <div class="stat-value">${quizAccuracy}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${quizAccuracy}%; background: ${quizAccuracy > 70 ? 'var(--success)' : (quizAccuracy > 40 ? 'var(--warning)' : 'var(--danger)')}">${correctQuizzes}/${totalQuizzes}</div>
+                    </div>
+                </div>
+                </div>`;
+
+            container.innerHTML = html;
+        }
+
+        function checkAchievements() {
+            const achievements = [];
+
+            if (appState.currentStreak >= 7 && !appState.achievements.includes('Week Warrior')) {
+                achievements.push('Week Warrior');
+            }
+            if (appState.wordsViewed.length >= 50 && !appState.achievements.includes('Half Century')) {
+                achievements.push('Half Century');
+            }
+
+            achievements.forEach(achievement => {
+                appState.achievements.push(achievement);
+                showToast(`🏆 Achievement: ${achievement}!`, 'success');
+            });
+
+            if (achievements.length > 0) saveState();
+        }
+
+        function switchTab(tabId, navItem) {
+            document.querySelectorAll('.tab-panel').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            navItem.classList.add('active');
+
+            if (tabId === 'historyTab') updateHistory();
+            if (tabId === 'quizTab') initQuiz();
+            if (tabId === 'statsTab') updateStats();
+            if (tabId === 'alphabetTab') initAlphabetGrid();
+            if (tabId === 'wordsTab') initWordsCategories();
+            if (tabId === 'phrasesTab') initPhrases();
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[appState.interfaceLanguage] && translations[appState.interfaceLanguage][key]) {
+                    element.textContent = translations[appState.interfaceLanguage][key];
+                }
+            });
+        }
+
+        function toggleLanguage() {
+            appState.interfaceLanguage = appState.interfaceLanguage === 'EN' ? 'HI' : 'EN';
+            saveState();
+            applyTranslations();
+        }
+
+        window.onload = initApp;
+
+    </script>
+</body>
+
+</html>
