@@ -8,7 +8,7 @@ const https = require('https'); // Use 'https' for making requests to the Google
 const cors = require('cors');   // Middleware to enable CORS for your frontend
 
 // --- Server Configuration ---
-const PORT = process.env.PORT || 3000; // Use port 3000 unless specified in environment
+const PORT = process.env.PORT || 3010; // Use port 3010 unless specified in environment
 const app = express();
 
 // --- Middleware ---
